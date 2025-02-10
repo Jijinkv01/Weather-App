@@ -1,0 +1,56 @@
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<body>
+    <div class="container text-center mt-5">
+        <h1 class="mb-4 text-primary">🌤️ Weather App</h1>
+        
+        <div class="card mx-auto shadow-lg p-4" style="max-width: 400px; background: rgba(255, 255, 255, 0.8); border-radius: 15px;">
+            
+
+            <input type="text" class="form-control mb-3" name="searchInput" placeholder="Enter your location" id="searchInput">
+            <button type="button" class="btn btn-primary w-100" id="clickBTN">Get Weather</button>
+
+           
+            
+
+            <div id="weatherResult" class="mt-4">
+                <!-- Weather Details will appear here -->
+            </div>
+        </div>
+    </div>
+<script>
+document.getElementById("clickBTN").addEventListener("click",async () => {
+  
+
+    const city = document.getElementById("searchInput").value.trim()
+    console.log(city)
+    
+    if(!city){
+         Swal.fire({
+        icon: "warning",
+        title: "Oops...",
+        text: "Please enter your city name!",
+    });
+        return
+    }else{
+        try{
+            
+            const response = await axios.post(`/weather`,{city});
+                const data = response.data;
+                console.log(data)
+
+                document.getElementById("weatherResult").innerHTML = `
+                 <h4 class="text-success">${data.location}</h4>
+                    <p><strong>Temperature:</strong> ${data.temp}°C</p>
+                    <p><strong>Wind Speed:</strong> ${data.windSpeed} km/h</p>
+                    <p><strong>Sunset:</strong> ${data.sunset}</p>`
+        } catch (error) {
+                 document.getElementById("weatherResult").innerHTML = `<p class="text-danger">❌ Failed to get weather data</p>`;
+        }
+    }
+})
+
+
+
+
+</script>
+</body>
